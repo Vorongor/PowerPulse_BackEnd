@@ -1,15 +1,16 @@
+require('dotenv').config();
+
 const mongoose = require("mongoose");
 const app = require("./app");
 
-const dbURL =
-  "mongodb+srv://mrmaddarknes:sNI2jv2le4icneK8@vorongorclacter.hsxv0qo.mongodb.net/db-contacts";
+const dbURL = process.env.MONGODB_URL;
 
 mongoose.connect(dbURL);
 
 const db = mongoose.connection;
 
 db.on("connected", () => {
-  console.log(`Підключено до MongoDB Atlas на ${dbURL}`);
+  console.log(`Підключено до MongoDB Atlas`);
 });
 
 db.on("error", (err) => {
