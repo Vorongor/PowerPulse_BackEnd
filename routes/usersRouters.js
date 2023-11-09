@@ -16,5 +16,5 @@ const { upload } = require("./midleware/upload");
 //   userController.updateAvatars
 // );
 // router.post("/verify", userController.userVerify);
-router.post("/", userController.checkIn);
+router.get("/", userController.checkIn);
 module.exports = router;
