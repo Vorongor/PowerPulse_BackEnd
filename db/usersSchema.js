@@ -16,22 +16,18 @@ const userSchema = new mongoose.Schema({
   },
   height: {
     type: Number,
-    required: [true, "Height is required"],
     min: [150, "Minimum height is 150 cm"],
   },
   currentWeight: {
     type: Number,
-    required: [true, "Current weight is required"],
     min: [35, "Minimum current weight is 35 kg"],
   },
   desiredWeight: {
     type: Number,
-    required: [true, "Desired weight is required"],
     min: [35, "Minimum desired weight is 35 kg"],
   },
   birthday: {
     type: Date,
-    required: [true, "Birthday is required"],
     validate: {
       validator: function (value) {
         const currentDate = new Date();
@@ -43,17 +39,14 @@ const userSchema = new mongoose.Schema({
   },
   blood: {
     type: Number,
-    required: [true, "Blood type is required"],
     enum: [1, 2, 3, 4],
   },
   sex: {
     type: String,
-    required: [true, "Sex is required"],
     enum: ["male", "female"],
   },
   levelActivity: {
     type: Number,
-    required: [true, "Level of activity is required"],
     enum: [1, 2, 3, 4, 5],
   },
   bmr: {
