@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { HttpError } = require("../../helpers/index");
 const gravatar = require("gravatar");
 const { User } = require("../../db/usersSchema");
-const { generateToken, verifyToken } = require("../midleware/auth");
+const { validateUserParams } = require("../midleware/userValidate");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
@@ -15,45 +15,104 @@ const { sendVerificationEmail } = require("../midleware/sendEmail");
 const tempDir = path.join(__dirname, "../", "../", "temp");
 const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
 
-// const registerUser = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
+// Розрахунок денної норми калорій
+const calculateDailyCalories = (
+  height,
+  currentWeight,
+  desiredWeight,
+  age,
+  blood,
+  sex,
+  levelActivity
+) => {
+  const sportIndex = (levelActivity) => {
+    const activityMap = { 1: 1.2, 2: 1.375, 3: 1.55, 4: 1.725, 5: 1.9 };
 
-//     const { error } = validateUser({ email, password });
+    return activityMap[levelActivity] || null;
+  };
 
-//     if (error) {
-//       throw HttpError(400, error.details[0].message);
-//     }
+  let bmr;
 
-//     const existingUser = await User.findOne({ email });
+  if (sex === "male") {
+    //     Для чоловіків:
+    // BMR = (10 * поточна вага (кг) + 6,25 * зріст (см) - 5 * вік (роки) + 5) * коефіцієнт по способу життя
+    const bmr = (10 * currentWeight + 6.25 * height - 5 * age + 5) * sportIndex;
+  }
+  if (sex === "female") {
+    // Для жінок:
+    // BMR = (10 * поточна вага (кг) + 6,25 * зріст (см) - 5 * вік (роки) - 161) * коефіцієнт по способу життя
+    const bmr =
+      (10 * currentWeight + 6.25 * height - 5 * age - 161) * sportIndex;
+  }
+  return bmr;
+};
 
-//     if (existingUser) {
-//       throw HttpError(409, "Email in use");
-//     }
-//     const avatarURL = gravatar.url(email, { protocol: "https", s: "100" });
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const verificationToken = nanoid();
-//     const user = await User.create({
-//       email,
-//       password: hashedPassword,
-//       avatarURL,
-//       verificationToken,
-//     });
-//     const token = generateToken(user);
+const updateUser = async (req, res, next) => {
+  try {
+    const {
+      height,
+      currentWeight,
+      desiredWeight,
+      birthday,
+      blood,
+      sex,
+      levelActivity,
+    } = req.body;
+    const userId = req.user._id;
 
-//     res.status(201).json({
-//       token: token,
-//       user: {
-//         email: user.email,
-//         subscription: "starter",
-//         avatarURL,
-//         verificationToken,
-//       },
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    const today = new Date();
+    const birthDate = new Date(birthday);
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    const { error } = validateUserParams({
+      height,
+      currentWeight,
+      desiredWeight,
+      birthday,
+      blood,
+      sex,
+      levelActivity,
+    });
+
+    if (error) {
+      throw HttpError(400, error.details[0].message);
+    }
+
+    const dailyCalories = calculateDailyCalories(
+      height,
+      currentWeight,
+      desiredWeight,
+      age,
+      blood,
+      sex,
+      levelActivity
+    );
+    // const dailyExerciseTime = 110;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        height,
+        currentWeight,
+        desiredWeight,
+        age,
+        blood,
+        sex,
+        levelActivity,
+        dailyCalories,
+      },
+      { new: true }
+    );
+
+    res.json({
+      status: "success",
+      code: 200,
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // const loginUser = async (req, res, next) => {
 //   try {
@@ -279,13 +338,13 @@ const checkIn = (req, res) => {
 };
 
 module.exports = {
-  // registerUser,
-  // loginUser,
+  updateUser,
+  updateUser,
   // logoutUser,
   // getCurrentUser,
   // updateSubscription,
   // updateAvatars,
   // verifiyToken,
   // userVerify,
-  checkIn
+  checkIn,
 };

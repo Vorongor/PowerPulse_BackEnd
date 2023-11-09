@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { passportAuthenticate } = require("./midleware/auth");
 const userController = require("./controlers/userControler");
+const authController = require("./controlers/authController");
 const { upload } = require("./midleware/upload");
 
-// router.post("/register", userController.registerUser);
-// router.post("/login", userController.loginUser);
-// router.post("/logout", userController.logoutUser);
-// router.get("/current", passportAuthenticate, userController.getCurrentUser);
+router.post("/register", authController.registerUser);
+router.post("/login", authController.loginUser);
+router.post("/logout", authController.logoutUser);
+router.put("/update", passportAuthenticate, userController.updateUser);
 // router.patch("/", passportAuthenticate, userController.updateSubscription);
 // router.patch(
 //   "/avatars",

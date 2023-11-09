@@ -3,7 +3,7 @@ const passportJWT = require("passport-jwt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../db/usersSchema");
 require("dotenv").config();
-const secretKey = "Vorongor";
+const secretKey = process.env.SECRET_KEY;
 
 // Set up Passport JWT strategy
 const ExtractJWT = passportJWT.ExtractJwt;
@@ -28,7 +28,7 @@ passport.use(
 
 // Function to generate a JWT token
 const generateToken = (user) => {
-  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: "1h" });
+  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: "24h" });
   return token;
 };
 

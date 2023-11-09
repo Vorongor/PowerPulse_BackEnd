@@ -12,7 +12,7 @@ const filePath = path.join(
   "db",
   "productsCategories.json"
 );
-console.log("🚀 ~ file: productControler.js:9 ~ filePath:", filePath);
+
 // const getContacts = async (req, res, next) => {
 //   try {
 //     const userId = req.user._id;
