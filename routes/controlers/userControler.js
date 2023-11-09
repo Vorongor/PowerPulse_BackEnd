@@ -268,6 +268,15 @@ const userVerify = async (req, res, next) => {
     next(error);
   }
 };
+const checkIn = (req, res) => {
+  try {
+    return res.status(200).json({
+      message: "Conect is deployed!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   registerUser,
@@ -278,4 +287,5 @@ module.exports = {
   updateAvatars,
   verifiyToken,
   userVerify,
+  checkIn
 };
