@@ -14,6 +14,7 @@ const productController = require("./controlers/productControler");
 // router.use(checkToken);
 
 router.get("/", productController.getProducts);
+router.get("/categories", productController.getProductsCategories);
 // router.get("/:contactId", passportAuthenticate, contactController.getContact);
 // router.post("/", passportAuthenticate, contactController.createContact);
 // router.delete(

@@ -1,8 +1,18 @@
+const fs = require("fs").promises;
+const path = require("path");
 const { HttpError } = require("../../helpers/index");
 // const { Contact } = require("../../db/contactsSchema");
 // const { validateContact } = require("../midleware/validateBody");
 const { Product } = require("../../db/productSchema");
 
+const filePath = path.join(
+  __dirname,
+  "../",
+  "../",
+  "db",
+  "productsCategories.json"
+);
+console.log("🚀 ~ file: productControler.js:9 ~ filePath:", filePath);
 // const getContacts = async (req, res, next) => {
 //   try {
 //     const userId = req.user._id;
@@ -30,6 +40,24 @@ const { Product } = require("../../db/productSchema");
 const getProducts = async (req, res, next) => {
   try {
     const result = await Product.find();
+
+    if (!result) {
+      throw HttpError(404, "Not Found!");
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getProductsCategories = async (req, res, next) => {
+  try {
+    const fileContent = await fs.readFile(filePath, "utf-8");
+    const result = JSON.parse(fileContent);
 
     if (!result) {
       throw HttpError(404, "Not Found!");
@@ -175,4 +203,5 @@ module.exports = {
   // updateContact,
   // updateContactFavorite,
   getProducts,
+  getProductsCategories,
 };
