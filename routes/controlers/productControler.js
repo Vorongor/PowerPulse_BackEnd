@@ -13,30 +13,6 @@ const filePath = path.join(
   "productsCategories.json"
 );
 
-// const getContacts = async (req, res, next) => {
-//   try {
-//     const userId = req.user._id;
-//     const { page = 1, limit = 10, favorite } = req.query;
-//     const filter = { owner: userId };
-
-//     if (favorite !== undefined) {
-//       filter.favorite = favorite === "true";
-//     }
-//     const skip = (page - 1) * limit;
-
-//     const result = await Contact.find(filter)
-//       .skip(skip)
-//       .limit(parseInt(limit, 10));
-//     res.json({
-//       status: "success",
-//       code: 200,
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 const getProducts = async (req, res, next) => {
   try {
     const result = await Product.find();
@@ -72,136 +48,63 @@ const getProductsCategories = async (req, res, next) => {
   }
 };
 
-// const createContact = async (req, res, next) => {
-//   try {
-//     const { name, email, phone } = req.body;
-//     if (!name || !email || !phone) {
-//       throw HttpError(400, "missing required name field");
-//     }
-//     const { error } = validateContact({ name, email, phone });
+const getAllowed = async (req, res, next) => {
+  try {
+    const { blood } = req.body;
 
-//     if (error) {
-//       throw HttpError(400, error.details[0].message);
-//     }
+    const validBloodGroups = [1, 2, 3, 4];
+    if (!validBloodGroups.includes(blood)) {
+      throw HttpError(400, "Invalid blood group");
+    }
 
-//     const userId = req.user._id;
+    const result = await Product.find({
+      [`groupBloodNotAllowed.${blood}`]: false,
+    });
 
-//     if (name && email && phone) {
-//       const result = await Contact.create({
-//         name,
-//         email,
-//         phone,
-//         owner: userId,
-//       });
-//       res.json({
-//         status: "success",
-//         code: 201,
-//         data: result,
-//       });
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    if (!result) {
+      throw HttpError(404, "Not Found!");
+    }
 
-// const deleteContact = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const userId = req.user._id;
+    res.json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-//     const result = await Contact.findOneAndRemove({
-//       _id: contactId,
-//       owner: userId,
-//     });
+const getForbiden = async (req, res, next) => {
+  try {
+    const { blood } = req.body;
 
-//     if (!result) {
-//       throw HttpError(404, "Contact Not Found or You're Not the Owner!");
-//     }
+    const validBloodGroups = [1, 2, 3, 4];
+    if (!validBloodGroups.includes(blood)) {
+      throw HttpError(400, "Invalid blood group");
+    }
 
-//     res.json({
-//       status: "Contact deleted",
-//       code: 200,
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    const result = await Product.find({
+      [`groupBloodNotAllowed.${blood}`]: true,
+    });
 
-// const updateContact = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const body = req.body;
-//     const userId = req.user._id;
+    if (!result) {
+      throw HttpError(404, "Not Found!");
+    }
 
-//     const { name, email, phone } = body;
-//     const { error } = validateContact(body);
-
-//     if (error) {
-//       throw HttpError(400, error.details[0].message);
-//     }
-
-//     if (!body) {
-//       throw HttpError(400, "Missing contact data");
-//     }
-
-//     const result = await Contact.findOneAndUpdate(
-//       { _id: contactId, owner: userId },
-//       { name, email, phone },
-//       { new: true }
-//     );
-
-//     if (!result) {
-//       throw HttpError(404, "Contact Not Found or You're Not the Owner!");
-//     }
-
-//     res.json({
-//       status: "Contact updated",
-//       code: 200,
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const updateContactFavorite = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const userId = req.user._id;
-//     const { favorite } = req.body;
-
-//     if (favorite === undefined) {
-//       return res.status(400).json({ message: "Missing field favorite" });
-//     }
-
-//     const result = await Contact.findOneAndUpdate(
-//       { _id: contactId, owner: userId },
-//       { favorite },
-//       { new: true }
-//     );
-
-//     if (!result) {
-//       throw HttpError(404, "Contact Not Found or You're Not the Owner!");
-//     }
-
-//     res.json({
-//       status: "Contact updated",
-//       code: 200,
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    res.json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
-  // getContacts,
-  // getContact,
-  // createContact,
-  // deleteContact,
-  // updateContact,
-  // updateContactFavorite,
   getProducts,
   getProductsCategories,
+  getAllowed,
+  getForbiden,
 };

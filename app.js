@@ -18,7 +18,7 @@ app.use(express.static("public"));
 app.use("/users", usersRouters);
 app.use("/products", productsRouters);
 app.use("/exercises", exercisesRouters);
-app.use("/filters", filtersRouters);
+
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found 404" });

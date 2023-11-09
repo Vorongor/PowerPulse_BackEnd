@@ -2,19 +2,12 @@ const express = require("express");
 const router = express.Router();
 const { passportAuthenticate } = require("./midleware/auth");
 const exerciseController = require("./controlers/exerciseController");
-const { upload } = require("./midleware/upload");
+const filtersController = require("./controlers/filtersController");
 
-// router.post("/register", userController.registerUser);
-// router.post("/login", userController.loginUser);
-// router.post("/logout", userController.logoutUser);
-// router.get("/current", passportAuthenticate, userController.getCurrentUser);
-// router.patch("/", passportAuthenticate, userController.updateSubscription);
-// router.patch(
-//   "/avatars",
-//   passportAuthenticate,
-//   upload.single("avatar"),
-//   userController.updateAvatars
-// );
-// router.post("/verify", userController.userVerify);
-router.get("/", exerciseController.getExercises);
+router.get("/", passportAuthenticate, exerciseController.getExercises);
+router.get("/filters", passportAuthenticate, filtersController.getFilters);
+router.get("/bodyParts", passportAuthenticate, filtersController.getFilters);
+router.get("/muscules", passportAuthenticate, filtersController.getFilters);
+router.get("/equipments", passportAuthenticate, filtersController.getFilters);
+
 module.exports = router;
