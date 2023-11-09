@@ -13,6 +13,6 @@ const filtersController = require("./controlers/filtersController");
 //   upload.single("avatar"),
 //   userController.updateAvatars
 // );
-// router.post("/verify", userController.userVerify);
+
 router.get("/", filtersController.getFilters);
 module.exports = router;
