@@ -9,7 +9,7 @@ router.post("/register", authController.registerUser);
 router.post("/login", authController.loginUser);
 router.post("/logout", authController.logoutUser);
 router.put("/update", passportAuthenticate, userController.updateUser);
-// router.patch("/", passportAuthenticate, userController.updateSubscription);
+router.get("/current", passportAuthenticate, userController.getCurrentUser);
 // router.patch(
 //   "/avatars",
 //   passportAuthenticate,

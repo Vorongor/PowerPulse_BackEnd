@@ -114,82 +114,26 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-// const loginUser = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
+const getCurrentUser = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const user = req.user;
+    const token = req.headers.authorization.split(" ")[1];
 
-//     const { error } = validateUser({ email, password });
+    if (!user) {
+      throw HttpError(401, "Token is invalid");
+    }
+    const currentUser = await User.findById(userId);
 
-//     if (error) {
-//       throw HttpError(400, error.details[0].message);
-//     }
-
-//     const user = await User.findOne({ email });
-
-//     if (!user || !(await bcrypt.compare(password, user.password))) {
-//       throw HttpError(401, "Invalid credentials");
-//     }
-
-//     const validAccess = user.verify;
-
-//     if (validAccess !== true) {
-//       throw HttpError(403, "Your email not verify");
-//     }
-
-//     const token = generateToken(user);
-
-//     res.status(200).json({
-//       token: token,
-//       user: {
-//         email: user.email,
-//         subscription: "starter",
-//         avatarURL: user.avatarURL,
-//       },
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const logoutUser = async (req, res, next) => {
-//   try {
-//     const token = req.headers.authorization.split(" ")[1];
-//     const decodedToken = verifyToken(token);
-//     if (!decodedToken) {
-//       throw HttpError(401, "Token is invalid");
-//     }
-//     const user = await User.findOne({ _id: decodedToken.userId });
-//     if (!user) {
-//       throw HttpError(401, "Not authorized");
-//     }
-//     res.status(204).json({ message: "Successful Log Out" });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const getCurrentUser = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     const token = req.headers.authorization.split(" ")[1];
-
-//     if (!user) {
-//       throw HttpError(401, "Token is invalid");
-//     }
-
-//     res.status(200).json({
-//       token: token,
-//       user: {
-//         email: user.email,
-//         subscription: user.subscription,
-//         avatarURL: user.avatarURL,
-//         verificationToken: user.verificationToken,
-//       },
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      user: currentUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // const updateSubscription = async (req, res, next) => {
 //   try {
@@ -340,8 +284,7 @@ const checkIn = (req, res) => {
 module.exports = {
   updateUser,
   updateUser,
-  // logoutUser,
-  // getCurrentUser,
+  getCurrentUser,
   // updateSubscription,
   // updateAvatars,
   // verifiyToken,
