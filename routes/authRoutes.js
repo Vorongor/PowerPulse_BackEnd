@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const userController = require("./controlers/userControler");
+// const express = require("express");
+// const router = express.Router();
+// const userController = require("./controlers/userControler");
 
-router.get("/:verificationToken", userController.verifiyToken);
+// router.get("/:verificationToken", userController.verifiyToken);
 
-module.exports = router;
+// module.exports = router;
