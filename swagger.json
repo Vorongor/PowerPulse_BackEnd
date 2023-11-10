@@ -319,12 +319,12 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
+          "description": "Exemple: {'blood': 3}",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
+                "$ref": "#/components/schemas/GetAllowedRequest"
               }
             }
           }
@@ -358,12 +358,12 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
+          "description": "Exemple: {'blood': 3}",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
+                "$ref": "#/components/schemas/GetAllowedRequest"
               }
             }
           }
@@ -507,11 +507,21 @@
         }
       }
     },
-    "/exercises/bodyParts/:bodyPart": {
+    "/exercises/bodyParts/{bodyPart}": {
       "get": {
         "tags": ["Training"],
         "summary": "Get list of exercises filtred by body patr",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "bodyPart",
+            "in": "path",
+            "description": "Body part for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Only need to be authorized",
@@ -585,11 +595,21 @@
         }
       }
     },
-    "/exercises/muscules/:target": {
+    "/exercises/muscules/{target}": {
       "get": {
         "tags": ["Training"],
         "summary": "Get list of exercise filtred by target muscule",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "description": "Target muscule for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Only need to be authorized",
@@ -663,11 +683,21 @@
         }
       }
     },
-    "/exercises/equipments/:equipment": {
+    "/exercises/equipments/{equipment}": {
       "get": {
         "tags": ["Training"],
         "summary": "Get list of  exercises filtred by equipment",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "equipment",
+            "in": "path",
+            "description": "Equipment for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Only need to be authorized",
@@ -993,6 +1023,20 @@
             "levelActivity": 3,
             "dailyCalories": 2500
           }
+        }
+      },
+      "GetAllowedRequest": {
+        "type": "object",
+        "properties": {
+          "blood": {
+            "type": "integer",
+            "description": "Blood group of the user",
+            "enum": [1, 2, 3, 4]
+          }
+        },
+        "required": ["blood"],
+        "example": {
+          "blood": 1
         }
       },
       "GetProductsResponse": {
