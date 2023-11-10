@@ -18,7 +18,7 @@ const getFilters = async (req, res, next) => {
     next(error);
   }
 };
-const getFiltersBodyPart = async (req, res, next) => {
+const getListOfBodyPart = async (req, res, next) => {
   try {
     const result = await Filter.find({
       filter: "Body parts",
@@ -36,11 +36,10 @@ const getFiltersBodyPart = async (req, res, next) => {
     next(error);
   }
 };
-const getFiltersMuscules = async (req, res, next) => {
+const getListOfMuscules = async (req, res, next) => {
   try {
-    const part = req.body;
     const result = await Filter.find({
-      name: part,
+      filter: "Muscles",
     });
 
     if (!result) {
@@ -55,7 +54,7 @@ const getFiltersMuscules = async (req, res, next) => {
     next(error);
   }
 };
-const getFiltersEquipment = async (req, res, next) => {
+const getListOfEquipment = async (req, res, next) => {
   try {
     const result = await Filter.find({
       filter: "Equipment",
@@ -76,4 +75,7 @@ const getFiltersEquipment = async (req, res, next) => {
 
 module.exports = {
   getFilters,
+  getListOfBodyPart,
+  getListOfMuscules,
+  getListOfEquipment,
 };
