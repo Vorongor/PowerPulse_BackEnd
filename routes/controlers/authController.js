@@ -1,19 +1,9 @@
 const bcrypt = require("bcrypt");
 const { HttpError } = require("../../helpers/index");
-const gravatar = require("gravatar");
 const { User } = require("../../db/usersSchema");
 const { generateToken, verifyToken } = require("../midleware/auth");
-const path = require("path");
-const fs = require("fs/promises");
-const Jimp = require("jimp");
-const { validateUser, validateNewUser } = require("../midleware/userValidate");
-const { nanoid } = require("nanoid");
-const { use } = require("../productsRouters");
-const Joi = require("joi");
-const { sendVerificationEmail } = require("../midleware/sendEmail");
 
-const tempDir = path.join(__dirname, "../", "../", "temp");
-const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
+const { validateUser, validateNewUser } = require("../midleware/userValidate");
 
 const registerUser = async (req, res, next) => {
   try {
@@ -70,6 +60,7 @@ const loginUser = async (req, res, next) => {
 
     res.status(200).json({
       token: token,
+      userId: user._id,
       user: {
         name: user.name,
         email: user.email,
@@ -97,98 +88,8 @@ const logoutUser = async (req, res, next) => {
   }
 };
 
-// const getCurrentUser = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     const token = req.headers.authorization.split(" ")[1];
-
-//     if (!user) {
-//       throw HttpError(401, "Token is invalid");
-//     }
-
-//     res.status(200).json({
-//       token: token,
-//       user: {
-//         email: user.email,
-//         subscription: user.subscription,
-//         avatarURL: user.avatarURL,
-//         verificationToken: user.verificationToken,
-//       },
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const verifiyToken = async (req, res, next) => {
-//   try {
-//     const { verificationToken } = req.params;
-//     const result = await User.findOneAndUpdate(
-//       { verificationToken },
-//       { $set: { verify: true, verificationToken: null } },
-//       { new: true }
-//     );
-
-//     if (!result) {
-//       throw HttpError(404, "Not Found!");
-//     }
-//     res.json({
-//       status: "success",
-//       code: 200,
-//       data: result,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// const userVerify = async (req, res, next) => {
-//   try {
-//     const schema = Joi.object({
-//       email: Joi.string().email().required(),
-//     });
-
-//     const { error } = schema.validate(req.body);
-
-//     if (error) {
-//       return res.status(400).json({ message: "Missing required field email" });
-//     }
-
-//     const email = req.body.email;
-
-//     const user = await User.findOne({ email });
-
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     if (user.verify === true) {
-//       return res
-//         .status(400)
-//         .json({ message: "Verification has already been passed" });
-//     }
-
-//     const verificationToken = user.verificationToken;
-
-//     const emailResponse = await sendVerificationEmail(email, verificationToken);
-
-//     return res.status(200).json({
-//       message: "Verification email sent",
-//       emailSentTo: email,
-//       emailContent: emailResponse,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
-  // getCurrentUser,
-  // updateSubscription,
-  // updateAvatars,
-  // verifiyToken,
-  // userVerify,
 };
