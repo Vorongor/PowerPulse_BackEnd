@@ -124,7 +124,7 @@ const getCurrentUser = async (req, res, next) => {
   }
 };
 
-const checkIn = (req, res) => {
+const checkIn = (req, res, next) => {
   try {
     return res.status(200).json({
       message: "Conect is deployed!",
@@ -134,9 +134,30 @@ const checkIn = (req, res) => {
   }
 };
 
+const changeUser = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await User.findByIdAndUpdate(
+      {
+        _id: contactId,
+        owner: req.user._id,
+      },
+      req.body
+    );
+    if (!result) {
+      throw HttpError(404, "can't change user information");
+    }
+    return res
+      .status(201)
+      .json({ message: "user information has been updated" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   updateUser,
-  updateUser,
+  changeUser,
   getCurrentUser,
   checkIn,
 };
