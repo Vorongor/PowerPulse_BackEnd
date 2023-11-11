@@ -952,7 +952,7 @@
       "get": {
         "tags": ["Statistic"],
         "summary": "Get the number of exercise videos",
-        "security": [{ "Bearer": [] }],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -976,7 +976,7 @@
       "get": {
         "tags": ["Statistic"],
         "summary": "Get the total calories burned",
-        "security": [{ "Bearer": [] }],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1000,7 +1000,7 @@
       "get": {
         "tags": ["Statistic"],
         "summary": "Get the number of users",
-        "security": [{ "Bearer": [] }],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1024,7 +1024,7 @@
       "get": {
         "tags": ["Statistic"],
         "summary": "Get the total exercise time",
-        "security": [{ "Bearer": [] }],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1048,7 +1048,7 @@
       "get": {
         "tags": ["Statistic"],
         "summary": "Get the number of training sessions",
-        "security": [{ "Bearer": [] }],
+        "security": [],
         "responses": {
           "200": {
             "description": "Successful operation",
