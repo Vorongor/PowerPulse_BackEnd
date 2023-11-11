@@ -390,7 +390,7 @@
         }
       }
     },
-    "/exercises/{exerciseId}": {
+    "/exercises/current/{exerciseId}": {
       "get": {
         "tags": ["Exercises"],
         "summary": "Get current exercises by id",

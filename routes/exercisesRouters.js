@@ -7,7 +7,7 @@ const filtersController = require("./controlers/filtersController");
 router.get("/", passportAuthenticate, exerciseController.getExercises);
 router.get("/filters", passportAuthenticate, filtersController.getFilters);
 router.get(
-  "/:exerciseId",
+  "/current/:exerciseId",
   passportAuthenticate,
   exerciseController.getExerciseById
 );
