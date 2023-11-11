@@ -59,6 +59,26 @@ const removeExercise = async (req, res, next) => {
   }
 };
 
+const getExerciseByDate = async (req, res, next) => {
+  try {
+    const { date } = req.query;
+    const userId = req.user._id;
+
+    const result = await ExerciseLog.find({
+      date: date,
+      owner: userId,
+    });
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getExerciseFoodByDate = async (req, res, next) => {
   try {
     const { date } = req.query;
@@ -80,26 +100,6 @@ const getExerciseFoodByDate = async (req, res, next) => {
         foods,
         exercises,
       },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getExerciseByDate = async (req, res, next) => {
-  try {
-    const { date } = req.query;
-    const userId = req.user._id;
-
-    const result = await ExerciseLog.find({
-      date: date,
-      owner: userId,
-    });
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: result,
     });
   } catch (error) {
     next(error);

@@ -113,10 +113,6 @@
           "400": {
             "description": "Bad request (invalid request body)",
             "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
-            "content": {}
           }
         }
       }
@@ -128,7 +124,7 @@
         "parameters": [],
         "security": [],
         "responses": {
-          "201": {
+          "204": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -138,12 +134,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
+          "401": {
+            "description": "Not authorized or Token Is Invalid",
             "content": {}
           }
         }
@@ -275,12 +267,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -303,12 +295,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -331,12 +323,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -359,12 +351,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -387,12 +379,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -425,12 +417,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -463,12 +455,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -501,12 +493,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -539,12 +531,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -567,12 +559,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -595,12 +587,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -623,12 +615,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -651,12 +643,12 @@
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -671,7 +663,7 @@
             "name": "date",
             "in": "query",
             "description": "Date for filtering food and exercise",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
@@ -690,17 +682,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Filter"
+                  "$ref": "#/components/schemas/DiaryResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -715,13 +707,13 @@
             "name": "date",
             "in": "query",
             "description": "Date for filtering food and exercise",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "date": {
                   "type": "string",
-                  "format": "date"
+                  "example": "10/11/2023"
                 }
               }
             }
@@ -734,7 +726,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Filter"
+                  "$ref": "#/components/schemas/FoodByDate"
                 }
               }
             }
@@ -743,8 +735,12 @@
             "description": "Bad request (invalid request body)",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -773,7 +769,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Filter"
+                  "$ref": "#/components/schemas/FoodLog"
                 }
               }
             }
@@ -782,8 +778,12 @@
             "description": "Bad request (invalid request body)",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -811,17 +811,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Exercise"
+                  "$ref": "#/components/schemas/FoodLog"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -836,13 +836,13 @@
             "name": "date",
             "in": "query",
             "description": "Date for filtering food and exercise",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "date": {
                   "type": "string",
-                  "format": "date"
+                  "example": "10/11/2023"
                 }
               }
             }
@@ -855,7 +855,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Filter"
+                  "$ref": "#/components/schemas/ExerciseByDate"
                 }
               }
             }
@@ -864,8 +864,12 @@
             "description": "Bad request (invalid request body)",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -894,17 +898,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Filter"
+                  "$ref": "#/components/schemas/ExerciseLog"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -932,17 +936,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Exercise"
+                  "$ref": "#/components/schemas/ExerciseLog"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not Found!",
             "content": {}
           }
         }
@@ -968,6 +972,10 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found!",
+            "content": {}
           }
         }
       }
@@ -992,6 +1000,10 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found!",
+            "content": {}
           }
         }
       }
@@ -1016,6 +1028,10 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found!",
+            "content": {}
           }
         }
       }
@@ -1040,6 +1056,10 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found!",
+            "content": {}
           }
         }
       }
@@ -1064,6 +1084,10 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found!",
+            "content": {}
           }
         }
       }
@@ -1633,6 +1657,212 @@
           "filter": "Body parts",
           "name": "back",
           "imgURL": "https://ftp.goit.study/img/power-pulse/filters/back_wzzphw.jpg"
+        }
+      },
+      "DiaryResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "description": "HTTP status code",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "foods": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FoodLog"
+                }
+              },
+              "exercises": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ExerciseLog"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": {
+            "foods": [
+              {
+                "_id": "64f2458d6f67bc34bae4f801",
+                "product": "64f2458d6f67bc34bae4f802",
+                "date": "10/11/2023",
+                "amount": 200,
+                "calories": 400,
+                "owner": "64f2458d6f67bc34bae4f803",
+                "__v": 0
+              }
+            ],
+            "exercises": [
+              {
+                "_id": "64f2458d6f67bc34bae4f804",
+                "exercise": "64f2458d6f67bc34bae4f805",
+                "date": "10/11/2023",
+                "time": 30,
+                "calories": 150,
+                "owner": "64f2458d6f67bc34bae4f803",
+                "__v": 0
+              }
+            ]
+          }
+        }
+      },
+      "ExerciseByDate": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "description": "HTTP status code",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Exercice done",
+              "example": "dairy"
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": [
+            {
+              "_id": "64f2458d6f67bc34bae4f804",
+              "exercise": "64f2458d6f67bc34bae4f805",
+              "date": "10/11/2023",
+              "time": 30,
+              "calories": 150,
+              "owner": "64f2458d6f67bc34bae4f803",
+              "__v": 0
+            }
+          ]
+        }
+      },
+      "FoodByDate": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "description": "HTTP status code",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Food eaten",
+              "example": "dairy"
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": [
+            {
+              "_id": "64f2458d6f67bc34bae4f801",
+              "product": "64f2458d6f67bc34bae4f802",
+              "date": "10/11/2023",
+              "amount": 200,
+              "calories": 400,
+              "owner": "64f2458d6f67bc34bae4f803",
+              "__v": 0
+            }
+          ]
+        }
+      },
+      "FoodLog": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "product": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "calories": {
+            "type": "number"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
+          }
+        },
+        "example": {
+          "_id": "64f2458d6f67bc34bae4f801",
+          "product": "64f2458d6f67bc34bae4f802",
+          "date": "10/11/2023",
+          "amount": 200,
+          "calories": 400,
+          "owner": "64f2458d6f67bc34bae4f803",
+          "__v": 0
+        }
+      },
+      "ExerciseLog": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "exercise": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "time": {
+            "type": "number"
+          },
+          "calories": {
+            "type": "number"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
+          }
+        },
+        "example": {
+          "_id": "64f2458d6f67bc34bae4f804",
+          "exercise": "64f2458d6f67bc34bae4f805",
+          "date": "10/11/2023",
+          "time": 30,
+          "calories": 150,
+          "owner": "64f2458d6f67bc34bae4f803",
+          "__v": 0
         }
       }
     },
