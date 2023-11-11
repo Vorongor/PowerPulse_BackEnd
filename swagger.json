@@ -240,7 +240,7 @@
         }
       }
     },
-    "/products/{productId}": {
+    "/products/current/{productId}": {
       "get": {
         "tags": ["Products"],
         "summary": "Get current product by id",
