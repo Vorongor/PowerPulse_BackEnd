@@ -1,8 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
 const { HttpError } = require("../../helpers/index");
-// const { Contact } = require("../../db/contactsSchema");
-// const { validateContact } = require("../midleware/validateBody");
 const { Product } = require("../../db/productSchema");
 
 const filePath = path.join(
@@ -101,10 +99,28 @@ const getForbiden = async (req, res, next) => {
     next(error);
   }
 };
+const getProductById = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const result = await Product.findById(productId);
+
+    if (!result) {
+      throw HttpError(404, "Not Found!");
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getProducts,
   getProductsCategories,
   getAllowed,
   getForbiden,
+  getProductById,
 };

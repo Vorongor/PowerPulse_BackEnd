@@ -1,19 +1,23 @@
 const Joi = require("joi");
 
-const validateContact = (data) => {
-  const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
-
+const validateFood = (data) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30),
-    email: Joi.string().email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    }),
-    phone: Joi.string().pattern(phonePattern),
+    amount: Joi.number().min(1).required(),
+    calories: Joi.number().min(1).required(),
+    // date: Joi.string().isoDate(),
   });
   return schema.validate(data);
 };
 
+const validateExercise = (data) => {
+  const schema = Joi.object({
+    time: Joi.number().min(1).required(),
+    calories: Joi.number().min(1).required(),
+    // date: Joi.string().isoDate(),
+  });
+  return schema.validate(data);
+};
 module.exports = {
-  validateContact,
+  validateFood,
+  validateExercise,
 };

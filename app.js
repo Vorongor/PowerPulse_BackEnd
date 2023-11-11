@@ -7,6 +7,8 @@ const cors = require("cors");
 const productsRouters = require("./routes/productsRouters");
 const usersRouters = require("./routes/usersRouters");
 const exercisesRouters = require("./routes/exercisesRouters");
+const diaryRouters = require("./routes/diaryRouters");
+const statisticRouters = require("./routes/statisticRouters");
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(express.static("public"));
 app.use("/users", usersRouters);
 app.use("/products", productsRouters);
 app.use("/exercises", exercisesRouters);
+app.use("/diary", diaryRouters);
+app.use("/statistic", statisticRouters);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

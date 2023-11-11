@@ -138,9 +138,5 @@ module.exports = {
   updateUser,
   updateUser,
   getCurrentUser,
-  // updateSubscription,
-  // updateAvatars,
-  // verifiyToken,
-  // userVerify,
   checkIn,
 };

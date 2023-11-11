@@ -78,10 +78,28 @@ const getListByEquipment = async (req, res, next) => {
     next(error);
   }
 };
+const getExerciseById = async (req, res, next) => {
+  try {
+    const { exerciseId } = req.params;
+    const result = await Exercise.findById(exerciseId);
+
+    if (!result) {
+      throw HttpError(404, "Not Found!");
+    }
+    res.json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getExercises,
   getListByBodyPart,
   getListByMusqule,
   getListByEquipment,
+  getExerciseById,
 };

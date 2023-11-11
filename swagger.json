@@ -26,12 +26,20 @@
       "description": "Products endpoints"
     },
     {
-      "name": "Training",
-      "description": "Exercises and Filters endpoints"
+      "name": "Exercises",
+      "description": "Exercises endpoints"
+    },
+    {
+      "name": "Filters",
+      "description": "Filters endpoints"
     },
     {
       "name": "Diary",
       "description": "Diary endpoints"
+    },
+    {
+      "name": "Statistic",
+      "description": "Statistic endpoints"
     }
   ],
   "paths": {
@@ -119,17 +127,6 @@
         "summary": "User Logout",
         "parameters": [],
         "security": [],
-        "requestBody": {
-          "description": "Only need to be athorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -158,17 +155,6 @@
         "summary": "Get information abuot current authorize user",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be athorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -240,17 +226,6 @@
         "summary": "Get list of all products",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -273,23 +248,50 @@
         }
       }
     },
+    "/products/{productId}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get current product by id",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Body part for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
     "/products/categories": {
       "get": {
         "tags": ["Products"],
         "summary": "Get list of product`s categories",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -318,17 +320,6 @@
         "summary": "Get list of allowed products by blood group",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Exemple: {'blood': 3}",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetAllowedRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -357,17 +348,6 @@
         "summary": "Get list of forbiden products by blood group",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Exemple: {'blood': 3}",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetAllowedRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -392,21 +372,10 @@
     },
     "/exercises/": {
       "get": {
-        "tags": ["Training"],
+        "tags": ["Exercises"],
         "summary": "Get list of all exercises",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -429,23 +398,164 @@
         }
       }
     },
+    "/exercises/{exerciseId}": {
+      "get": {
+        "tags": ["Exercises"],
+        "summary": "Get current exercises by id",
+        "parameters": [
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "description": "Body part for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/exercises/bodyParts/{bodyPart}": {
+      "get": {
+        "tags": ["Exercises"],
+        "summary": "Get list of exercises filtred by body patr",
+        "parameters": [
+          {
+            "name": "bodyPart",
+            "in": "path",
+            "description": "Body part for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/exercises/muscules/{target}": {
+      "get": {
+        "tags": ["Exercises"],
+        "summary": "Get list of exercise filtred by target muscule",
+        "parameters": [
+          {
+            "name": "target",
+            "in": "path",
+            "description": "Target muscule for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/exercises/equipments/{equipment}": {
+      "get": {
+        "tags": ["Exercises"],
+        "summary": "Get list of  exercises filtred by equipment",
+        "parameters": [
+          {
+            "name": "equipment",
+            "in": "path",
+            "description": "Equipment for filtering exercises",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
     "/exercises/filters": {
       "get": {
-        "tags": ["Training"],
+        "tags": ["Filters"],
         "summary": "Get list of all filters",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -470,21 +580,10 @@
     },
     "/exercises/bodyParts": {
       "get": {
-        "tags": ["Training"],
+        "tags": ["Filters"],
         "summary": "Get list of body part filters",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -492,55 +591,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Filter"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/exercises/bodyParts/{bodyPart}": {
-      "get": {
-        "tags": ["Training"],
-        "summary": "Get list of exercises filtred by body patr",
-        "parameters": [
-          {
-            "name": "bodyPart",
-            "in": "path",
-            "description": "Body part for filtering exercises",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Exercise"
                 }
               }
             }
@@ -558,21 +608,10 @@
     },
     "/exercises/muscules": {
       "get": {
-        "tags": ["Training"],
+        "tags": ["Filters"],
         "summary": "Get list of muscules filters",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -580,55 +619,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Filter"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/exercises/muscules/{target}": {
-      "get": {
-        "tags": ["Training"],
-        "summary": "Get list of exercise filtred by target muscule",
-        "parameters": [
-          {
-            "name": "target",
-            "in": "path",
-            "description": "Target muscule for filtering exercises",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Exercise"
                 }
               }
             }
@@ -646,8 +636,124 @@
     },
     "/exercises/equipments": {
       "get": {
-        "tags": ["Training"],
+        "tags": ["Filters"],
         "summary": "Get list of equipments filters",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Filter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/diary?date={date}": {
+      "get": {
+        "tags": ["Diary"],
+        "summary": "Get list of food and exercise by current date",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date for filtering food and exercise",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "example": "10/11/2023"
+                }
+              }
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Filter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/diary/food?date={date}": {
+      "get": {
+        "tags": ["Diary"],
+        "summary": "Get list of food by current date",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date for filtering food and exercise",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Filter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/diary/food": {
+      "post": {
+        "tags": ["Diary"],
+        "summary": "Add a food by current date",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -683,15 +789,15 @@
         }
       }
     },
-    "/exercises/equipments/{equipment}": {
-      "get": {
-        "tags": ["Training"],
-        "summary": "Get list of  exercises filtred by equipment",
+    "/diary/food/{foodId}": {
+      "delete": {
+        "tags": ["Diary"],
+        "summary": "Remove current Food",
         "parameters": [
           {
-            "name": "equipment",
+            "name": "foodId",
             "in": "path",
-            "description": "Equipment for filtering exercises",
+            "description": "foodId for remove food",
             "required": true,
             "schema": {
               "type": "string"
@@ -699,17 +805,6 @@
           }
         ],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Only need to be authorized",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successful operation",
@@ -728,6 +823,247 @@
           "409": {
             "description": "Provided email already exists",
             "content": {}
+          }
+        }
+      }
+    },
+    "/diary/exercise?date={date}": {
+      "get": {
+        "tags": ["Diary"],
+        "summary": "Get list of exercises by current date",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date for filtering food and exercise",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Filter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/diary/exercise": {
+      "post": {
+        "tags": ["Diary"],
+        "summary": "Add a exercise by current date",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Only need to be authorized",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetCurrentUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Filter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/diary/exercise/{exerciseId}": {
+      "delete": {
+        "tags": ["Diary"],
+        "summary": "Remove current exercise",
+        "parameters": [
+          {
+            "name": "exerciseId",
+            "in": "path",
+            "description": "exerciseId for remove food",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/statistic/video": {
+      "get": {
+        "tags": ["Statistic"],
+        "summary": "Get the number of exercise videos",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "code": { "type": "integer", "example": 200 },
+                    "videos": { "type": "integer", "example": 10 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistic/calories": {
+      "get": {
+        "tags": ["Statistic"],
+        "summary": "Get the total calories burned",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "code": { "type": "integer", "example": 200 },
+                    "calories": { "type": "number", "example": 5000 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistic/users": {
+      "get": {
+        "tags": ["Statistic"],
+        "summary": "Get the number of users",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "code": { "type": "integer", "example": 200 },
+                    "users": { "type": "integer", "example": 50 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistic/time": {
+      "get": {
+        "tags": ["Statistic"],
+        "summary": "Get the total exercise time",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "code": { "type": "integer", "example": 200 },
+                    "hours": { "type": "number", "example": 120 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistic/training": {
+      "get": {
+        "tags": ["Statistic"],
+        "summary": "Get the number of training sessions",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "success" },
+                    "code": { "type": "integer", "example": 200 },
+                    "hours": { "type": "integer", "example": 20 }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -882,6 +1218,15 @@
       },
       "UpdateUserRequest": {
         "type": "object",
+        "required": [
+          "height",
+          "currentWeight",
+          "desiredWeight",
+          "birthday",
+          "blood",
+          "sex",
+          "levelActivity"
+        ],
         "properties": {
           "height": {
             "type": "number",
