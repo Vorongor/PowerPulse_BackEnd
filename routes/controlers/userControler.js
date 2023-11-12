@@ -1,6 +1,9 @@
 const { HttpError } = require("../../helpers/index");
 const { User } = require("../../db/usersSchema");
-const { validateUserParams } = require("../midleware/userValidate");
+const {
+  validateUserParams,
+  validateUserChangeParams,
+} = require("../midleware/userValidate");
 
 // Розрахунок денної норми калорій
 const calculateDailyCalories = (
@@ -124,7 +127,7 @@ const getCurrentUser = async (req, res, next) => {
   }
 };
 
-const checkIn = (req, res) => {
+const checkIn = (req, res, next) => {
   try {
     return res.status(200).json({
       message: "Conect is deployed!",
@@ -134,9 +137,40 @@ const checkIn = (req, res) => {
   }
 };
 
+const changeUser = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const { error } = validateUserChangeParams(req.body);
+
+    if (error) {
+      throw HttpError(400, error.details[0].message);
+    }
+
+    const result = await User.findByIdAndUpdate(
+      {
+        _id: userId,
+      },
+      req.body
+    );
+
+    if (!result) {
+      throw HttpError(404, "can't change user information");
+    }
+
+    res.status(201).json({
+      status: "success",
+      message: "user information has been updated",
+      user: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   updateUser,
-  updateUser,
+  changeUser,
   getCurrentUser,
   checkIn,
 };
