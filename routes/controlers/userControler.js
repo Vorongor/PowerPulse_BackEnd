@@ -158,10 +158,12 @@ const changeUser = async (req, res, next) => {
       throw HttpError(404, "can't change user information");
     }
 
+    const currentUser = await User.findById(userId);
+
     res.status(201).json({
       status: "success",
       message: "user information has been updated",
-      user: result,
+      user: currentUser,
     });
   } catch (error) {
     next(error);
