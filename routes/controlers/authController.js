@@ -1,7 +1,12 @@
 const bcrypt = require("bcrypt");
 const { HttpError } = require("../../helpers/index");
 const { User } = require("../../db/usersSchema");
-const { generateToken, verifyToken } = require("../midleware/auth");
+const {
+  generateToken,
+  verifyToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} = require("../midleware/auth");
 
 const { validateUser, validateNewUser } = require("../midleware/userValidate");
 
@@ -27,9 +32,11 @@ const registerUser = async (req, res, next) => {
       password: hashedPassword,
     });
     const token = generateToken(user);
+    const refreshToken = generateRefreshToken(user);
 
     res.status(201).json({
       token: token,
+      refreshToken: refreshToken,
       user: {
         name: user.name,
         email: user.email,
@@ -57,9 +64,11 @@ const loginUser = async (req, res, next) => {
     }
 
     const token = generateToken(user);
+    const refreshToken = generateRefreshToken(user);
 
     res.status(200).json({
       token: token,
+      refreshToken: refreshToken,
       userId: user._id,
       user: {
         name: user.name,
@@ -78,6 +87,7 @@ const logoutUser = async (req, res, next) => {
     if (!decodedToken) {
       throw HttpError(401, "Token is invalid");
     }
+
     const user = await User.findOne({ _id: decodedToken.userId });
     if (!user) {
       throw HttpError(401, "Not authorized");
@@ -88,8 +98,33 @@ const logoutUser = async (req, res, next) => {
   }
 };
 
+const refreshUser = async (req, res, next) => {
+  try {
+    const oldRefreshToken = req.query.refreshToken;
+    const decodedToken = verifyRefreshToken(oldRefreshToken);
+    if (!decodedToken) {
+      throw HttpError(401, "Token is invalid");
+    }
+    const user = await User.findOne({ _id: decodedToken.userId });
+    if (!user) {
+      throw HttpError(401, "Not authorized");
+    }
+
+    const token = generateToken(user);
+    const refreshToken = generateRefreshToken(user);
+    res.status(200).json({
+      message: "user succesfully refresh",
+      token,
+      refreshToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  refreshUser,
 };

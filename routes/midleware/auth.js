@@ -3,7 +3,7 @@ const passportJWT = require("passport-jwt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../db/usersSchema");
 require("dotenv").config();
-const secretKey = "Vorongor";
+const secretKey = process.env.SECRET_KEY;
 
 // Set up Passport JWT strategy
 const ExtractJWT = passportJWT.ExtractJwt;
@@ -28,8 +28,14 @@ passport.use(
 
 // Function to generate a JWT token
 const generateToken = (user) => {
-  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: "1h" });
+  const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: "7h" });
   return token;
+};
+const generateRefreshToken = (user) => {
+  const refreshToken = jwt.sign({ userId: user._id }, secretKey, {
+    expiresIn: "7d",
+  });
+  return refreshToken;
 };
 
 // Function to verify a JWT token
@@ -39,7 +45,14 @@ const verifyToken = (token) => {
     return decoded;
   } catch (error) {
     return null;
-    ``;
+  }
+};
+const verifyRefreshToken = (refreshToken) => {
+  try {
+    const decodedToken = jwt.verify(refreshToken, secretKey);
+    return decodedToken;
+  } catch (error) {
+    return null;
   }
 };
 
@@ -47,4 +60,6 @@ module.exports = {
   passportAuthenticate: passport.authenticate("jwt", { session: false }),
   generateToken,
   verifyToken,
+  generateRefreshToken,
+  verifyRefreshToken,
 };

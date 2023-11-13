@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   avatrUrl: {
-    type: String
+    type: String,
   },
   height: {
     type: Number,
@@ -60,6 +60,10 @@ const userSchema = new mongoose.Schema({
     default: 110,
   },
   token: {
+    type: String,
+    default: "",
+  },
+  refreshToken: {
     type: String,
     default: "",
   },
