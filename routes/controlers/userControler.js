@@ -155,7 +155,6 @@ const getCurrentUser = async (req, res, next) => {
     }
     const currentUser = await User.findById(userId);
 
-    storage.getBuckets("pover_pulse_bucket").then(() => console.log(storage));
     res.status(201).json({
       status: "success",
       code: 201,

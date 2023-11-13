@@ -52,6 +52,7 @@ const verifyRefreshToken = (refreshToken) => {
     const decodedToken = jwt.verify(refreshToken, secretKey);
     return decodedToken;
   } catch (error) {
+    console.error(error);  // Вивести помилку для додаткового аналізу
     return null;
   }
 };

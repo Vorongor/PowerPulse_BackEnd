@@ -100,8 +100,12 @@ const logoutUser = async (req, res, next) => {
 
 const refreshUser = async (req, res, next) => {
   try {
-    const oldRefreshToken = req.query.refreshToken;
-    const decodedToken = verifyRefreshToken(oldRefreshToken);
+    const { refreshToken } = req.body;
+    console.log(
+      "🚀 ~ file: authController.js:104 ~ refreshUser ~ oldRefreshToken:",
+      refreshToken
+    );
+    const decodedToken = verifyRefreshToken(refreshToken);
     if (!decodedToken) {
       throw HttpError(401, "Token is invalid");
     }
@@ -110,17 +114,18 @@ const refreshUser = async (req, res, next) => {
       throw HttpError(401, "Not authorized");
     }
 
-    const token = generateToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const newToken = generateToken(user);
+    const newRefreshToken = generateRefreshToken(user);
     res.status(200).json({
       message: "user succesfully refresh",
-      token,
-      refreshToken,
+      token: newToken,
+      refreshToken: newRefreshToken,
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 module.exports = {
   registerUser,

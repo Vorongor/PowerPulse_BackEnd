@@ -141,6 +141,55 @@
         }
       }
     },
+    "/users/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Refresh user token",
+        "parameters": [
+          {
+            "name": "refreshToken",
+            "in": "body",
+            "description": "Refresh token",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
     "/users/current": {
       "get": {
         "tags": ["User"],
@@ -842,7 +891,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
+                "$ref": "#/components/schemas/FoodByDateReq"
               }
             }
           }
@@ -971,7 +1020,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetCurrentUserRequest"
+                "$ref": "#/components/schemas/ExerciseByDateReq"
               }
             }
           }
@@ -1803,6 +1852,37 @@
           }
         }
       },
+      "ExerciseByDateReq": {
+        "type": "object",
+        "required": ["exercise", "time", "calories"],
+        "properties": {
+          "exercise": {
+            "type": "string",
+            "description": "Exercise id",
+            "example": "64f2458d6f67bc34bae4f805"
+          },
+          "date": {
+            "type": "date",
+            "description": "date not required - it tiday by default",
+            "example": 20
+          },
+          "time": {
+            "type": "number",
+            "description": "time of training",
+            "example": 20
+          },
+          "calories": {
+            "type": "number",
+            "example": 300
+          }
+        },
+        "example": {
+          "exercise": "64f2458d6f67bc34bae4f805",
+          "date": "10/11/2023",
+          "time": 30,
+          "calories": 150
+        }
+      },
       "ExerciseByDate": {
         "type": "object",
         "properties": {
@@ -1839,6 +1919,37 @@
               "__v": 0
             }
           ]
+        }
+      },
+      "FoodByDateReq": {
+        "type": "object",
+        "required": ["product", "amount", "calories"],
+        "properties": {
+          "product": {
+            "type": "string",
+            "description": "product id",
+            "example": "64f2458d6f67bc34bae4f802"
+          },
+          "date": {
+            "type": "date",
+            "description": "date not required - it tiday by default",
+            "example": 20
+          },
+          "amount": {
+            "type": "number",
+            "description": "amount g of eaten product",
+            "example": 20
+          },
+          "calories": {
+            "type": "number",
+            "example": 300
+          }
+        },
+        "example": {
+          "product": "64f2458d6f67bc34bae4f802",
+          "date": "10/11/2023",
+          "amount": 20,
+          "calories": 150
         }
       },
       "FoodByDate": {
