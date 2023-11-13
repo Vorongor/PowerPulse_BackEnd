@@ -4,7 +4,44 @@ const {
   validateUserParams,
   validateUserChangeParams,
 } = require("../midleware/userValidate");
+const { Storage } = require("@google-cloud/storage");
+const path = require("path");
 
+const keyFilePath = path.resolve(
+  __dirname,
+  "..",
+  "..",
+  "db",
+  "woven-victor-404921-72cbf39ee2ce.json"
+);
+
+const storage = new Storage({
+  keyFilename: keyFilePath,
+  projectId: "woven-victor-404921",
+});
+
+const uploadAvatar = async (req, res, next) => {
+  try {
+    const bucketName = "pover_pulse_bucket";
+    const fileName = `avatars/${req.file.originalname}`;
+    const fileUpload = await storage.bucket(bucketName).upload(req.file.path, {
+      destination: fileName,
+      predefinedAcl: "publicRead", // Set predefinedAcl to 'publicRead' for public access
+    });
+
+    // Get the public URL of the uploaded file
+    const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
+    const userId = req.user._id;
+    const user = await User.findByIdAndUpdate(userId, {
+      avatrUrl: publicUrl,
+    });
+
+    // Respond with the public URL or any other relevant information
+    res.json({ status: "success", code: 201, user });
+  } catch (error) {
+    next(error);
+  }
+};
 // Розрахунок денної норми калорій
 const calculateDailyCalories = (
   height,
@@ -117,6 +154,7 @@ const getCurrentUser = async (req, res, next) => {
     }
     const currentUser = await User.findById(userId);
 
+    storage.getBuckets("pover_pulse_bucket").then(() => console.log(storage));
     res.status(201).json({
       status: "success",
       code: 201,
@@ -175,4 +213,5 @@ module.exports = {
   changeUser,
   getCurrentUser,
   checkIn,
+  uploadAvatar,
 };

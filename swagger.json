@@ -253,6 +253,49 @@
         }
       }
     },
+    "/users/avatar/upload": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Upload user avatar",
+        "description": "Upload a user's avatar image to Google Cloud Storage.",
+        "parameters": [
+          {
+            "name": "avatar",
+            "in": "formData",
+            "description": "The avatar image file to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "success",
+                  "code": 201,
+                  "imageUrl": "https://storage.googleapis.com/pover_pulse_bucket/avatars/promising.jpg"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
     "/products/": {
       "get": {
         "tags": ["Products"],

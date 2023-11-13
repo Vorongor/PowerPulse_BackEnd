@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema({
     required: [true, "Email is required"],
     unique: true,
   },
+  avatrUrl: {
+    type: String
+  },
   height: {
     type: Number,
     min: [150, "Minimum height is 150 cm"],
