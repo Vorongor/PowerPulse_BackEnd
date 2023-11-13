@@ -35,9 +35,10 @@ const uploadAvatar = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(userId, {
       avatrUrl: publicUrl,
     });
+    const currentUser = await User.findById(userId);
 
     // Respond with the public URL or any other relevant information
-    res.json({ status: "success", code: 201, user });
+    res.json({ status: "success", code: 201, user: currentUser });
   } catch (error) {
     next(error);
   }
