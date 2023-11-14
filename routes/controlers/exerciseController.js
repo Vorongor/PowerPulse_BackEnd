@@ -1,10 +1,14 @@
 const { HttpError } = require("../../helpers/index");
 const { Exercise } = require("../../db/exerciseSchema");
-const { validateContact } = require("../midleware/validateBody");
 
 const getExercises = async (req, res, next) => {
   try {
-    const result = await Exercise.find();
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 50;
+
+    const startIndex = (page - 1) * pageSize;
+
+    const result = await Exercise.find().skip(startIndex).limit(pageSize);
 
     if (!result) {
       throw HttpError(404, "Not Found!");
@@ -26,11 +30,14 @@ const getListByBodyPart = async (req, res, next) => {
       bodyPart: bodyPart,
     });
 
-    if (!result) {
-      throw HttpError(404, "Not Found!");
+    if (!result.length) {
+      throw HttpError(
+        404,
+        `Exercises for the specified body part '${bodyPart}' not found`
+      );
     }
     res.json({
-      status: "success",
+      status: `Exercises for the specified body part '${bodyPart}'`,
       code: 200,
       data: result,
     });
@@ -46,11 +53,14 @@ const getListByMusqule = async (req, res, next) => {
       target: target,
     });
 
-    if (!result) {
-      throw HttpError(404, "Not Found!");
+    if (!result.length) {
+      throw HttpError(
+        404,
+        `Exercises for the specified by muscule '${target}' not found`
+      );
     }
     res.json({
-      status: "success",
+      status: `Exercises for the specified by muscule '${target}'`,
       code: 200,
       data: result,
     });
@@ -66,11 +76,14 @@ const getListByEquipment = async (req, res, next) => {
       equipment: equipment,
     });
 
-    if (!result) {
-      throw HttpError(404, "Not Found!");
+    if (!result.length) {
+      throw HttpError(
+        404,
+        `Exercises for the specified by equipment '${equipment}' not found`
+      );
     }
     res.json({
-      status: "success",
+      status: `Exercises for the specified by equipment '${equipment}'`,
       code: 200,
       data: result,
     });
@@ -84,7 +97,7 @@ const getExerciseById = async (req, res, next) => {
     const result = await Exercise.findById(exerciseId);
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, `Exercises not found`);
     }
     res.json({
       status: "success",

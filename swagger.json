@@ -345,11 +345,32 @@
         }
       }
     },
-    "/products/": {
+    "/products?page={page}&pageSize={pageSize}": {
       "get": {
         "tags": ["Products"],
         "summary": "Get list of all products",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of products per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "responses": {
           "201": {
@@ -495,11 +516,32 @@
         }
       }
     },
-    "/exercises/": {
+    "/exercises?page={page}&pageSize={pageSize}": {
       "get": {
         "tags": ["Exercises"],
         "summary": "Get list of all exercises",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of products per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        ],
         "security": [{ "Bearer": [] }],
         "responses": {
           "201": {

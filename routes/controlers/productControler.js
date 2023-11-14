@@ -13,13 +13,18 @@ const filePath = path.join(
 
 const getProducts = async (req, res, next) => {
   try {
-    const result = await Product.find();
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 50;
+
+    const startIndex = (page - 1) * pageSize;
+
+    const result = await Product.find().skip(startIndex).limit(pageSize);
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Can't get list of product");
     }
     res.json({
-      status: "success",
+      status: "List Of products default 50 items",
       code: 200,
       data: result,
     });
@@ -37,7 +42,7 @@ const getProductsCategories = async (req, res, next) => {
       throw HttpError(404, "Not Found!");
     }
     res.json({
-      status: "success",
+      status: "List Of products categories",
       code: 200,
       data: result,
     });
@@ -52,7 +57,10 @@ const getAllowed = async (req, res, next) => {
 
     const validBloodGroups = [1, 2, 3, 4];
     if (!validBloodGroups.includes(blood)) {
-      throw HttpError(400, "Invalid blood group");
+      throw HttpError(
+        400,
+        "Invalid blood group, it should be number one of 1,2,3,4"
+      );
     }
 
     const result = await Product.find({
@@ -64,7 +72,7 @@ const getAllowed = async (req, res, next) => {
     }
 
     res.json({
-      status: "success",
+      status: "List of allowed products",
       code: 200,
       data: result,
     });
@@ -79,7 +87,10 @@ const getForbiden = async (req, res, next) => {
 
     const validBloodGroups = [1, 2, 3, 4];
     if (!validBloodGroups.includes(blood)) {
-      throw HttpError(400, "Invalid blood group");
+      throw HttpError(
+        400,
+        "Invalid blood group, it should be number one of 1,2,3,4"
+      );
     }
 
     const result = await Product.find({
@@ -91,7 +102,7 @@ const getForbiden = async (req, res, next) => {
     }
 
     res.json({
-      status: "success",
+      status: "List of forbiden products",
       code: 200,
       data: result,
     });
@@ -99,13 +110,14 @@ const getForbiden = async (req, res, next) => {
     next(error);
   }
 };
+
 const getProductById = async (req, res, next) => {
   try {
     const { productId } = req.params;
     const result = await Product.findById(productId);
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Not Found product by that id");
     }
     res.json({
       status: "success",

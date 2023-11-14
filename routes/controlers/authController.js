@@ -23,7 +23,7 @@ const registerUser = async (req, res, next) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw HttpError(409, "Email already in use");
+      throw HttpError(409, "Email already in use, try login with it");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -35,8 +35,10 @@ const registerUser = async (req, res, next) => {
     const refreshToken = generateRefreshToken(user);
 
     res.status(201).json({
+      message: "New user has been create successfully",
       token: token,
       refreshToken: refreshToken,
+      userId: user._id,
       user: {
         name: user.name,
         email: user.email,
@@ -60,13 +62,14 @@ const loginUser = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw HttpError(401, "Invalid credentials");
+      throw HttpError(401, "Invalid credentials, check yor email or password");
     }
 
     const token = generateToken(user);
     const refreshToken = generateRefreshToken(user);
 
     res.status(200).json({
+      message: "User has been login successfully",
       token: token,
       refreshToken: refreshToken,
       userId: user._id,
@@ -85,7 +88,7 @@ const logoutUser = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = verifyToken(token);
     if (!decodedToken) {
-      throw HttpError(401, "Token is invalid");
+      throw HttpError(401, "Token is invalid, please try login again");
     }
 
     const user = await User.findOne({ _id: decodedToken.userId });
@@ -101,17 +104,13 @@ const logoutUser = async (req, res, next) => {
 const refreshUser = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
-    console.log(
-      "🚀 ~ file: authController.js:104 ~ refreshUser ~ oldRefreshToken:",
-      refreshToken
-    );
     const decodedToken = verifyRefreshToken(refreshToken);
     if (!decodedToken) {
-      throw HttpError(401, "Token is invalid");
+      throw HttpError(401, "RefreshToken is invalid");
     }
     const user = await User.findOne({ _id: decodedToken.userId });
     if (!user) {
-      throw HttpError(401, "Not authorized");
+      throw HttpError(401, "Not authorized to refresh youser");
     }
 
     const newToken = generateToken(user);
@@ -125,7 +124,6 @@ const refreshUser = async (req, res, next) => {
     next(error);
   }
 };
-
 
 module.exports = {
   registerUser,

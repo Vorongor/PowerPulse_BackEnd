@@ -6,7 +6,7 @@ const sportController = require("./controlers/sportControler");
 const { upload } = require("./midleware/upload");
 
 router.post("/food", passportAuthenticate, foodController.updateFood);
-router.post("/exercise", passportAuthenticate, sportController.updateExersise);
+router.post("/exercise", passportAuthenticate, sportController.updateExercise);
 router.delete("/food/:foodId", passportAuthenticate, foodController.removeFood);
 router.delete(
   "/exercise/:exerciseId",

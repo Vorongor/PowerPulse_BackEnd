@@ -8,6 +8,9 @@ const getVideo = async (req, res, next) => {
     const result = await Exercise.countDocuments({
       gifUrl: { $exists: true, $ne: null },
     });
+    if (!result) {
+      throw HttpError(404, "Not found or something went wrong!");
+    }
 
     res.json({
       status: "success",
@@ -21,7 +24,9 @@ const getVideo = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   try {
     const result = await User.countDocuments();
-
+    if (!result) {
+      throw HttpError(404, "Not found or something went wrong!");
+    }
     res.json({
       status: "success",
       code: 200,
@@ -34,7 +39,9 @@ const getUsers = async (req, res, next) => {
 const getTraining = async (req, res, next) => {
   try {
     const result = await ExerciseLog.countDocuments();
-
+    if (!result) {
+      throw HttpError(404, "Not found or something went wrong!");
+    }
     res.json({
       status: "success",
       code: 200,
@@ -49,7 +56,9 @@ const getCalories = async (req, res, next) => {
   try {
     const array = await ExerciseLog.find();
     let count = 0;
-
+    if (!array) {
+      throw HttpError(404, "Not found or something went wrong!");
+    }
     count = array.reduce((acc, item) => acc + item.calories, 0);
 
     res.json({
@@ -65,7 +74,9 @@ const getTime = async (req, res, next) => {
   try {
     const array = await ExerciseLog.find();
     let count = 0;
-
+    if (!array) {
+      throw HttpError(404, "Not found or something went wrong!");
+    }
     count = array.reduce((acc, item) => acc + item.time, 0);
 
     const finishCount = count / 60;

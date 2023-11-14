@@ -28,6 +28,9 @@ const updateFood = async (req, res, next) => {
       calories,
       owner: userId,
     });
+    if (!result) {
+      throw HttpError(400, "Somethin went wrong");
+    }
 
     res.json({
       status: "success",
@@ -47,8 +50,11 @@ const removeFood = async (req, res, next) => {
       _id: foodId,
       owner: userId,
     });
+    if (!deletedFood) {
+      throw HttpError(404, "Cant`t find that eaten food, or you not the owner");
+    }
     res.status(200).json({
-      status: "success",
+      status: "Food has been successfully deleted",
       code: 200,
       deletedFood,
     });
@@ -61,10 +67,22 @@ const getFoodByDate = async (req, res, next) => {
   try {
     const { date } = req.query;
     const userId = req.user._id;
+    if (!date) {
+      throw HttpError(400, "Date parameter is required");
+    }
+
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(date)) {
+      throw HttpError(400, "Invalid date format. Please use MM/DD/YYYY");
+    }
     const result = await FoodLog.find({ date: date, owner: userId });
 
+    if (!result.length) {
+      throw HttpError(404, "Food logs not found for the specified date");
+    }
+
     res.status(200).json({
-      status: "success",
+      status: `List of eaten food in ${date}`,
       code: 200,
       data: result,
     });

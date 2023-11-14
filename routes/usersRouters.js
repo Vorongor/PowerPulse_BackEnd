@@ -21,5 +21,4 @@ router.post(
   userController.uploadAvatar
 );
 
-router.get("/", userController.checkIn);
 module.exports = router;

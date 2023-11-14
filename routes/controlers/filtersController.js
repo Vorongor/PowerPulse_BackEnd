@@ -7,7 +7,7 @@ const getFilters = async (req, res, next) => {
     const result = await Filter.find();
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Filters not Found!");
     }
     res.json({
       status: "success",
@@ -25,7 +25,7 @@ const getListOfBodyPart = async (req, res, next) => {
     });
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Filters not Found! ");
     }
     res.json({
       status: "success",
@@ -43,7 +43,7 @@ const getListOfMuscules = async (req, res, next) => {
     });
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Filters not Found!");
     }
     res.json({
       status: "success",
@@ -61,7 +61,7 @@ const getListOfEquipment = async (req, res, next) => {
     });
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Filters not Found!");
     }
     res.json({
       status: "success",

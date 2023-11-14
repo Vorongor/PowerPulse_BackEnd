@@ -4,7 +4,7 @@ const { FoodLog } = require("../../db/foodLogSchema");
 const { validateExercise } = require("../midleware/validateBody");
 const { format } = require("date-fns");
 
-const updateExersise = async (req, res, next) => {
+const updateExercise = async (req, res, next) => {
   try {
     const { exerciseId, time, calories, date } = req.body;
     const userId = req.user._id;
@@ -29,6 +29,9 @@ const updateExersise = async (req, res, next) => {
       calories,
       owner: userId,
     });
+    if (!result) {
+      throw HttpError(400, "Somethin went wrong");
+    }
 
     res.json({
       status: "success",
@@ -48,6 +51,12 @@ const removeExercise = async (req, res, next) => {
       _id: exerciseId,
       owner: userId,
     });
+    if (!deletedExercise) {
+      throw HttpError(
+        404,
+        "Cant`t find that done exercise, or you not the owner"
+      );
+    }
 
     res.status(200).json({
       status: "success",
@@ -63,14 +72,24 @@ const getExerciseByDate = async (req, res, next) => {
   try {
     const { date } = req.query;
     const userId = req.user._id;
+    if (!date) {
+      throw HttpError(400, "Date parameter is required");
+    }
 
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(date)) {
+      throw HttpError(400, "Invalid date format. Please use MM/DD/YYYY");
+    }
     const result = await ExerciseLog.find({
       date: date,
       owner: userId,
     });
+    if (!result.length) {
+      throw HttpError(404, "Exercises logs not found for the specified date");
+    }
 
     res.status(200).json({
-      status: "success",
+      status: `List of done exercises in ${date}`,
       code: 200,
       data: result,
     });
@@ -106,7 +125,7 @@ const getExerciseFoodByDate = async (req, res, next) => {
   }
 };
 module.exports = {
-  updateExersise,
+  updateExercise,
   removeExercise,
   getExerciseByDate,
   getExerciseFoodByDate,

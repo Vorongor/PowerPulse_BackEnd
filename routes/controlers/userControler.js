@@ -14,36 +14,10 @@ const keyFilePath = path.resolve(
   "db",
   "woven-victor-404921-72cbf39ee2ce.json"
 );
-
 const storage = new Storage({
   keyFilename: keyFilePath,
   projectId: "woven-victor-404921",
 });
-
-const uploadAvatar = async (req, res, next) => {
-  try {
-    const bucketName = "pover_pulse_bucket";
-    const fileName = `avatars/${req.file.originalname}`;
-    const fileUpload = await storage.bucket(bucketName).upload(req.file.path, {
-      destination: fileName,
-      predefinedAcl: "publicRead", // Set predefinedAcl to 'publicRead' for public access
-    });
-
-    // Get the public URL of the uploaded file
-    const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
-    const userId = req.user._id;
-    const user = await User.findByIdAndUpdate(userId, {
-      avatrUrl: publicUrl,
-    });
-    const currentUser = await User.findById(userId);
-
-    // Respond with the public URL or any other relevant information
-    res.json({ status: "success", code: 201, user: currentUser });
-  } catch (error) {
-    next(error);
-  }
-};
-// Розрахунок денної норми калорій
 const calculateDailyCalories = (
   height,
   currentWeight,
@@ -129,13 +103,19 @@ const updateUser = async (req, res, next) => {
         blood,
         sex,
         levelActivity,
-        dailyCalories,
+        bmr: dailyCalories,
       },
       { new: true }
     );
+    if (!user) {
+      throw HttpError(
+        404,
+        "Can`t finde current user, check your authorisation"
+      );
+    }
 
     res.json({
-      status: "success",
+      status: "User info has been succesfully Added",
       code: 201,
       user,
     });
@@ -151,7 +131,7 @@ const getCurrentUser = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
 
     if (!user) {
-      throw HttpError(401, "Token is invalid");
+      throw HttpError(401, "Token is invalid, check your authorisation");
     }
     const currentUser = await User.findById(userId);
 
@@ -159,16 +139,6 @@ const getCurrentUser = async (req, res, next) => {
       status: "success",
       code: 201,
       user: currentUser,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const checkIn = (req, res, next) => {
-  try {
-    return res.status(200).json({
-      message: "Conect is deployed!",
     });
   } catch (error) {
     next(error);
@@ -193,14 +163,55 @@ const changeUser = async (req, res, next) => {
     );
 
     if (!result) {
-      throw HttpError(404, "can't change user information");
+      throw HttpError(
+        404,
+        "Can't change user information, check your authorisation"
+      );
     }
 
     const currentUser = await User.findById(userId);
 
     res.status(201).json({
-      status: "success",
       message: "user information has been updated",
+      user: currentUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const uploadAvatar = async (req, res, next) => {
+  try {
+    const bucketName = "pover_pulse_bucket";
+    const fileName = `avatars/${req.file.originalname}`;
+    const [fileUpload] = await storage
+      .bucket(bucketName)
+      .upload(req.file.path, {
+        destination: fileName,
+        predefinedAcl: "publicRead",
+      });
+
+    if (!fileUpload) {
+      throw HttpError(
+        404,
+        "Can't upload user avatar, check your authorisation"
+      );
+    }
+
+    const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
+    const userId = req.user._id;
+
+    const user = await User.findByIdAndUpdate(userId, { avatarUrl: publicUrl });
+
+    if (!user) {
+      throw HttpError(404, "Can't update user avatar, user not found");
+    }
+
+    const currentUser = await User.findById(userId);
+
+    res.json({
+      status: "Successfully upload user avatar",
+      code: 201,
       user: currentUser,
     });
   } catch (error) {
@@ -212,6 +223,5 @@ module.exports = {
   updateUser,
   changeUser,
   getCurrentUser,
-  checkIn,
   uploadAvatar,
 };
