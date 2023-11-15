@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Email is required"],
     unique: true,
   },
-  avatrUrl: {
+  avatarUrl: {
     type: String,
   },
   height: {
