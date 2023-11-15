@@ -15,6 +15,11 @@ router.use(checkToken);
 
 router.get("/", passportAuthenticate, productController.getProducts);
 router.get(
+  "/search",
+  passportAuthenticate,
+  productController.getProductsByQuery
+);
+router.get(
   "/current/:productId",
   passportAuthenticate,
   productController.getProductById

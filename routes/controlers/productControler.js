@@ -32,6 +32,39 @@ const getProducts = async (req, res, next) => {
     next(error);
   }
 };
+const getProductsByQuery = async (req, res, next) => {
+  try {
+    const search = req.query.search;
+    const category = req.query.category;
+    const blood = parseInt(req.query.blood);
+
+    const query = {};
+    if (search) query.title = { $regex: new RegExp(search, "i") };
+    if (category) query.category = category;
+    if (blood) query[`groupBloodNotAllowed.${blood}`] = false;
+
+    const result = await Product.find(query);
+
+    if (!result) {
+      throw HttpError(404, "Can't get list of product");
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({
+        status: `No products found with the specified parameters: title:${search}, category:${category}, blood:${blood}`,
+        code: 404,
+        data: [],
+      });
+    }
+    res.json({
+      status: `List Of products by serch:title:${search}, category:${category}, blood:${blood}`,
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const getProductsCategories = async (req, res, next) => {
   try {
@@ -135,4 +168,5 @@ module.exports = {
   getAllowed,
   getForbiden,
   getProductById,
+  getProductsByQuery,
 };

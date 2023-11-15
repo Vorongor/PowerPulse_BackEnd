@@ -394,6 +394,65 @@
         }
       }
     },
+    "/products?search={search}&category={category}&blood={blood}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get list of all products",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search query to find product",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "cheese"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Category of searched product",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "dairy"
+            }
+          },
+          {
+            "name": "blood",
+            "in": "query",
+            "description": "Blood of searched product",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProductsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found!",
+            "content": {}
+          }
+        }
+      }
+    },
     "/products/current/{productId}": {
       "get": {
         "tags": ["Products"],
