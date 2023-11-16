@@ -394,7 +394,7 @@
         }
       }
     },
-    "/products?search={search}&category={category}&blood={blood}": {
+    "/products/search?search={search}&category={category}&blood={blood}": {
       "get": {
         "tags": ["Products"],
         "summary": "Get list of all products",
