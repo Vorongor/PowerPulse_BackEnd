@@ -1,5 +1,6 @@
 const { HttpError } = require("../../helpers/index");
 const { FoodLog } = require("../../db/foodLogSchema");
+const { Product } = require("../../db/productSchema");
 const { validateFood } = require("../midleware/validateBody");
 const { format } = require("date-fns");
 
@@ -21,8 +22,15 @@ const updateFood = async (req, res, next) => {
       throw HttpError(400, error.details[0].message);
     }
 
+    const product = await Product.findById(productId);
+    console.log(
+      "🚀 ~ file: foodControler.js:26 ~ updateFood ~ product:",
+      product
+    );
     const result = await FoodLog.create({
-      product: productId,
+      product: product._id,
+      title: product.title,
+      category: product.category,
       date: formattedDate,
       amount,
       calories,

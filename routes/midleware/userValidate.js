@@ -33,7 +33,28 @@ const validateUserParams = (data) => {
   const schema = Joi.object({
     height: Joi.number().min(150).required().messages(customMessages),
     currentWeight: Joi.number().min(35).required().messages(customMessages),
-    // Додайте інші поля за аналогією
+    desiredWeight: Joi.number().min(35).required().messages(customMessages),
+    birthday: Joi.date()
+      .max("now")
+      .iso()
+      .required()
+      .messages(customMessages)
+      .custom((value, helpers) => {
+        const age = new Date().getFullYear() - new Date(value).getFullYear();
+        if (age < 18) {
+          return helpers.error("any.invalid");
+        }
+        return value;
+      }, "must be older than 18 years"),
+    blood: Joi.number().valid(1, 2, 3, 4).required().messages(customMessages),
+    sex: Joi.string()
+      .valid("male", "female")
+      .required()
+      .messages(customMessages),
+    levelActivity: Joi.number()
+      .valid(1, 2, 3, 4, 5)
+      .required()
+      .messages(customMessages),
   });
 
   return schema.validate(data, { abortEarly: false });

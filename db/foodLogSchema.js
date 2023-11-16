@@ -6,6 +6,14 @@ const foodLogSchema = new mongoose.Schema({
     ref: "Product",
     required: [true, "Product ID is required"],
   },
+  title: {
+    type: String,
+    required: [true, "Title is required"],
+  },
+  category: {
+    type: String,
+    required: [true, "Category is required"],
+  },
   date: {
     type: String,
     required: [true, "Date is required"],
