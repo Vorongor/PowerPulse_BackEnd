@@ -29,7 +29,7 @@ const getStatistic = async (req, res, next) => {
       numberOfRegistredUsers: users,
       numberOfDoneTraining: exercises,
       caloriesBurned: calories,
-      hoursExercise: finishCount,
+      hoursExercise: Math.round(finishCount),
     });
   } catch (error) {
     next(error);

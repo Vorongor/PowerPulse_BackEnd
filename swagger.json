@@ -1206,7 +1206,7 @@
         }
       }
     },
-    "/statistic/video": {
+    "/statistic": {
       "get": {
         "tags": ["Statistic"],
         "summary": "Get the number of exercise videos",
@@ -1221,119 +1221,17 @@
                   "properties": {
                     "status": { "type": "string", "example": "success" },
                     "code": { "type": "integer", "example": 200 },
-                    "videos": { "type": "integer", "example": 10 }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found!",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/statistic/calories": {
-      "get": {
-        "tags": ["Statistic"],
-        "summary": "Get the total calories burned",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "code": { "type": "integer", "example": 200 },
-                    "calories": { "type": "number", "example": 5000 }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found!",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/statistic/users": {
-      "get": {
-        "tags": ["Statistic"],
-        "summary": "Get the number of users",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "code": { "type": "integer", "example": 200 },
-                    "users": { "type": "integer", "example": 50 }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found!",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/statistic/time": {
-      "get": {
-        "tags": ["Statistic"],
-        "summary": "Get the total exercise time",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "code": { "type": "integer", "example": 200 },
-                    "hours": { "type": "number", "example": 120 }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found!",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/statistic/training": {
-      "get": {
-        "tags": ["Statistic"],
-        "summary": "Get the number of training sessions",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "code": { "type": "integer", "example": 200 },
-                    "hours": { "type": "integer", "example": 20 }
+                    "videos": { "type": "integer", "example": 10 },
+                    "numberOfRegistredUsers": {
+                      "type": "integer",
+                      "example": 120
+                    },
+                    "numberOfDoneTraining": {
+                      "type": "integer",
+                      "example": 180
+                    },
+                    "caloriesBurned": { "type": "integer", "example": 9150 },
+                    "hoursExercise": { "type": "integer", "example": 210 }
                   }
                 }
               }
