@@ -3,6 +3,7 @@ const { FoodLog } = require("../../db/foodLogSchema");
 const { Product } = require("../../db/productSchema");
 const { validateFood } = require("../midleware/validateBody");
 const { format } = require("date-fns");
+const { User } = require("../../db/usersSchema");
 
 const updateFood = async (req, res, next) => {
   try {
@@ -21,14 +22,20 @@ const updateFood = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.details[0].message);
     }
-
+    const user = await User.findById(userId);
     const product = await Product.findById(productId);
+
+    const isProductAllowed = (product, user) => {
+      const userBloodGroup = user.blood.toString();
+      return product.groupBloodNotAllowed[userBloodGroup] !== true;
+    };
 
     const result = await FoodLog.create({
       product: product._id,
       title: product.title,
       category: product.category,
       date: formattedDate,
+      recommend: isProductAllowed(product, user),
       amount,
       calories,
       owner: userId,

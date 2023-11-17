@@ -14,6 +14,10 @@ const foodLogSchema = new mongoose.Schema({
     type: String,
     required: [true, "Category is required"],
   },
+  recommend: {
+    type: Boolean,
+    required: [true, "Recommend is required"],
+  },
   date: {
     type: String,
     required: [true, "Date is required"],
