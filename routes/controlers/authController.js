@@ -73,10 +73,7 @@ const loginUser = async (req, res, next) => {
       token: token,
       refreshToken: refreshToken,
       userId: user._id,
-      user: {
-        name: user.name,
-        email: user.email,
-      },
+      user,
     });
   } catch (error) {
     next(error);

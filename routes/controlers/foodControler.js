@@ -23,10 +23,7 @@ const updateFood = async (req, res, next) => {
     }
 
     const product = await Product.findById(productId);
-    console.log(
-      "🚀 ~ file: foodControler.js:26 ~ updateFood ~ product:",
-      product
-    );
+
     const result = await FoodLog.create({
       product: product._id,
       title: product.title,
