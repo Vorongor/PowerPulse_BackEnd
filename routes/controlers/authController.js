@@ -103,11 +103,11 @@ const refreshUser = async (req, res, next) => {
     const { refreshToken } = req.body;
     const decodedToken = verifyRefreshToken(refreshToken);
     if (!decodedToken) {
-      throw HttpError(401, "RefreshToken is invalid");
+      throw HttpError(400, "RefreshToken is invalid");
     }
     const user = await User.findOne({ _id: decodedToken.userId });
     if (!user) {
-      throw HttpError(401, "Not authorized to refresh youser");
+      throw HttpError(400, "Invalid token try login again");
     }
 
     const newToken = generateToken(user);
