@@ -112,20 +112,35 @@ const changeUser = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.details[0].message);
     }
-
     const result = await User.findByIdAndUpdate(
       {
         _id: userId,
       },
-      req.body
+      req.body,
+      { new: true }
     );
-
     if (!result) {
       throw HttpError(
         404,
         "Can't change user information, check your authorisation"
       );
     }
+
+    const thenUser = await User.findById(userId);
+    const { sex, currentWeight, height, birthday, levelActivity } = thenUser;
+
+    const today = new Date();
+    const birthDate = new Date(birthday);
+    const age = today.getFullYear() - birthDate.getFullYear();
+
+    const bmr = calculateBMR(sex, currentWeight, height, age, levelActivity);
+    await User.findByIdAndUpdate(
+      {
+        _id: userId,
+      },
+      { bmr: bmr },
+      { new: true }
+    );
 
     const currentUser = await User.findById(userId);
 
