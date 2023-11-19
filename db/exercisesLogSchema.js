@@ -6,6 +6,22 @@ const exerciseLogSchema = new mongoose.Schema({
     ref: "Exercise",
     required: [true, "Exercise ID is required"],
   },
+  bodyPart: {
+    type: String,
+    required: [true, "Body part is required"],
+  },
+  equipment: {
+    type: String,
+    required: [true, "Equipment is required"],
+  },
+  name: {
+    type: String,
+    required: [true, "Exercise name is required"],
+  },
+  target: {
+    type: String,
+    required: [true, "Exercise target is required"],
+  },
   date: {
     type: String,
     required: [true, "Date is required"],

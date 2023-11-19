@@ -1,6 +1,7 @@
 const { HttpError } = require("../../helpers/index");
 const { ExerciseLog } = require("../../db/exercisesLogSchema");
 const { FoodLog } = require("../../db/foodLogSchema");
+const { Exercise } = require("../../db/exerciseSchema");
 const { validateExercise } = require("../midleware/validateBody");
 const { format } = require("date-fns");
 
@@ -22,8 +23,14 @@ const updateExercise = async (req, res, next) => {
       throw HttpError(400, error.details[0].message);
     }
 
+    const exercise = await Exercise.findById(exerciseId);
+
     const result = await ExerciseLog.create({
       exercise: exerciseId,
+      bodyPart: exercise.bodyPart,
+      equipment: exercise.equipment,
+      name: exercise.name,
+      target: exercise.target,
       date: formattedDate,
       time,
       calories,
