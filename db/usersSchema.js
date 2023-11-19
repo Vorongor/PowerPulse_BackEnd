@@ -54,6 +54,7 @@ const userSchema = new mongoose.Schema({
   },
   bmr: {
     type: Number,
+    default: 2200,
   },
   dailyExerciseTime: {
     type: Number,
@@ -66,6 +67,10 @@ const userSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
     default: "",
+  },
+  fullInfoCompleated: {
+    type: Boolean,
+    default: false,
   },
 });
 

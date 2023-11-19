@@ -91,9 +91,27 @@ const validateUserChangeParams = (data) => {
   return schema.validate(data, { abortEarly: false });
 };
 
+const sanitizeUser = (user) => {
+  const sanitizedUser = { ...user.toObject() };
+  delete sanitizedUser.password;
+
+  Object.keys(sanitizedUser).forEach((key) => {
+    if (
+      sanitizedUser[key] === undefined ||
+      sanitizedUser[key] === null ||
+      sanitizedUser[key] === ""
+    ) {
+      delete sanitizedUser[key];
+    }
+  });
+
+  return sanitizedUser;
+};
+
 module.exports = {
   validateNewUser,
   validateUser,
   validateUserParams,
   validateUserChangeParams,
+  sanitizeUser,
 };

@@ -8,7 +8,11 @@ const {
   verifyRefreshToken,
 } = require("../midleware/auth");
 
-const { validateUser, validateNewUser } = require("../midleware/userValidate");
+const {
+  validateUser,
+  validateNewUser,
+  sanitizeUser,
+} = require("../midleware/userValidate");
 
 const registerUser = async (req, res, next) => {
   try {
@@ -39,10 +43,7 @@ const registerUser = async (req, res, next) => {
       token: token,
       refreshToken: refreshToken,
       userId: user._id,
-      user: {
-        name: user.name,
-        email: user.email,
-      },
+      user: sanitizeUser(user),
     });
   } catch (error) {
     next(error);
@@ -73,7 +74,7 @@ const loginUser = async (req, res, next) => {
       token: token,
       refreshToken: refreshToken,
       userId: user._id,
-      user,
+      user: sanitizeUser(user),
     });
   } catch (error) {
     next(error);

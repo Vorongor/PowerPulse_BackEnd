@@ -3,6 +3,7 @@ const { User } = require("../../db/usersSchema");
 const {
   validateUserParams,
   validateUserChangeParams,
+  sanitizeUser,
 } = require("../midleware/userValidate");
 const { Storage } = require("@google-cloud/storage");
 const path = require("path");
@@ -18,6 +19,26 @@ const storage = new Storage({
   keyFilename: keyFilePath,
   projectId: "woven-victor-404921",
 });
+
+const calculateBMR = (sex, currentWeight, height, age, levelActivity) => {
+  const sportIndex = { 1: 1.2, 2: 1.375, 3: 1.55, 4: 1.725, 5: 1.9 };
+
+  if (sex === "male") {
+    return Math.round(
+      (10 * currentWeight + 6.25 * height - 5 * age + 5) *
+        sportIndex[levelActivity]
+    );
+  }
+
+  if (sex === "female") {
+    return Math.round(
+      (10 * currentWeight + 6.25 * height - 5 * age - 161) *
+        sportIndex[levelActivity]
+    );
+  }
+
+  return null;
+};
 
 const updateUser = async (req, res, next) => {
   try {
@@ -50,27 +71,7 @@ const updateUser = async (req, res, next) => {
       throw HttpError(400, error.details[0].message);
     }
 
-    let bmr;
-
-    const sportIndex = (levelActivity) => {
-      const activityMap = { 1: 1.2, 2: 1.375, 3: 1.55, 4: 1.725, 5: 1.9 };
-
-      return activityMap[levelActivity] || null;
-    };
-    if (sex === "male") {
-      //     Для чоловіків:
-      // BMR = (10 * поточна вага (кг) + 6,25 * зріст (см) - 5 * вік (роки) + 5) * коефіцієнт по способу життя
-      bmr =
-        (10 * currentWeight + 6.25 * height - 5 * age + 5) *
-        sportIndex(levelActivity);
-    }
-    if (sex === "female") {
-      // Для жінок:
-      // BMR = (10 * поточна вага (кг) + 6,25 * зріст (см) - 5 * вік (роки) - 161) * коефіцієнт по способу життя
-      bmr =
-        (10 * currentWeight + 6.25 * height - 5 * age - 161) *
-        sportIndex(levelActivity);
-    }
+    const bmr = calculateBMR(sex, currentWeight, height, age, levelActivity);
 
     const user = await User.findByIdAndUpdate(
       userId,
@@ -83,41 +84,19 @@ const updateUser = async (req, res, next) => {
         sex,
         levelActivity,
         bmr,
+        fullInfoCompleated: true,
       },
       { new: true }
     );
+
     if (!user) {
-      throw HttpError(
-        404,
-        "Can`t finde current user, check your authorisation"
-      );
+      throw HttpError(404, "Can`t find current user, check your authorisation");
     }
 
     res.json({
-      status: "User info has been succesfully Added",
+      status: "User info has been successfully added",
       code: 201,
-      user,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getCurrentUser = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
-    const user = req.user;
-    const token = req.headers.authorization.split(" ")[1];
-
-    if (!user) {
-      throw HttpError(401, "Token is invalid, check your authorisation");
-    }
-    const currentUser = await User.findById(userId);
-
-    res.status(201).json({
-      status: "success",
-      code: 201,
-      user: currentUser,
+      user: sanitizeUser(user),
     });
   } catch (error) {
     next(error);
@@ -151,8 +130,29 @@ const changeUser = async (req, res, next) => {
     const currentUser = await User.findById(userId);
 
     res.status(201).json({
-      message: "user information has been updated",
-      user: currentUser,
+      message: "User information has been updated",
+      user: sanitizeUser(currentUser),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getCurrentUser = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const user = req.user;
+    const token = req.headers.authorization.split(" ")[1];
+
+    if (!user) {
+      throw HttpError(401, "Token is invalid, check your authorisation");
+    }
+    const currentUser = await User.findById(userId);
+
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      user: sanitizeUser(currentUser),
     });
   } catch (error) {
     next(error);
@@ -191,7 +191,7 @@ const uploadAvatar = async (req, res, next) => {
     res.json({
       status: "Successfully upload user avatar",
       code: 201,
-      user: currentUser,
+      user: sanitizeUser(currentUser),
     });
   } catch (error) {
     next(error);
