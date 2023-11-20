@@ -8,6 +8,7 @@ const { format } = require("date-fns");
 const updateExercise = async (req, res, next) => {
   try {
     const { exerciseId, time, calories, date } = req.body;
+
     const userId = req.user._id;
     let logDate;
     if (date) {
@@ -26,7 +27,7 @@ const updateExercise = async (req, res, next) => {
     const exercise = await Exercise.findById(exerciseId);
 
     const result = await ExerciseLog.create({
-      exercise: exerciseId,
+      exercise: exercise._id,
       bodyPart: exercise.bodyPart,
       equipment: exercise.equipment,
       name: exercise.name,
