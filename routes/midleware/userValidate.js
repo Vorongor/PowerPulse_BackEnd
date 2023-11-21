@@ -62,6 +62,8 @@ const validateUserParams = (data) => {
 
 const validateUserChangeParams = (data) => {
   const schema = Joi.object({
+    name: Joi.string().messages(customMessages),
+    email: Joi.string().email().messages(customMessages),
     height: Joi.number().min(150).messages(customMessages),
     currentWeight: Joi.number().min(35).messages(customMessages),
     desiredWeight: Joi.number().min(35).messages(customMessages),
